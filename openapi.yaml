@@ -208,25 +208,25 @@ paths:
             type: string
         - in: query
           name: min_expiry
-          description: Returns ideas with expiry date no earlier than min_expiry.
+          description: Unix time stamp. Returns ideas with expiry date no earlier than min_expiry.
           schema:
             type: string
             example: 1720359354250
         - in: query
           name: max_expiry
-          description: Returns ideas with expiry date no later than max_expiry.
+          description: Unix time stamp. Returns ideas with expiry date no later than max_expiry.
           schema:
             type: string
             example: 1720359354250
         - in: query
           name: open_date
-          description: Returns ideas that were published from this date onwards
+          description: Unix time stamp. Returns ideas that were published from this date onwards
           schema:
             type: string
             example: 1720359354250
         - in: query
           name: close_date
-          description: Returns ideas that were closed from this date onwards.
+          description: Unix time stamp. Returns ideas that were closed from this date onwards.
           schema:
             type: string
             example: 1720359354250
