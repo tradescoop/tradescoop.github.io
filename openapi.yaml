@@ -1,0 +1,1044 @@
+openapi: 3.0.0
+servers:
+  - description: Tradescoop API Service
+    url: https://api.staging.tradescoop.io
+info:
+  description: Tradescoop API
+  version: "1.0.0"
+  title: Tradescoop API
+  contact:
+    email: info@tradescoop.io
+tags:
+  - name: registration
+    description: User registration and auth
+  - name: ideas
+    description: Trade ideas endpoints
+  - name: users
+    description: User endpoints
+  - name: account
+    description: Endpoints for Account operations
+paths:
+  /1/users/{username}:
+    get:
+      tags:
+        - users
+      summary: get user by username
+      parameters:
+        - in: path
+          name: username
+          schema:
+            type: string
+          required: true
+          description: The username to retrieve
+      responses:
+        '200':
+          description: item returned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserObject'
+        '400':
+          description: invalid input
+        '404':
+          description: resource not found
+  /1/users/{username}/ideas:
+    get:
+      tags:
+        - users
+      summary: get ideas belonging to the specified user. Includes ideas in draft mode.
+      parameters:
+        - in: path
+          name: username
+          schema:
+            type: string
+          required: true
+          description: username belonging to a user
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: A collection of ideas belonging to the specified user.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  anyOf:
+                  - $ref: '#/components/schemas/OptionIdeaResponse'
+                  - $ref: '#/components/schemas/StockIdeaResponse'
+                    
+        '400':
+          description: invalid input
+        '401':
+          description: Not authenticated
+  /1/users/{username}/summary:
+    get:
+      tags:
+        - users
+      summary: get user details and summary statistics
+      parameters:
+        - in: path
+          name: username
+          schema:
+            type: string
+          required: true
+          description: The username to retrieve
+      responses:
+        '200':
+          description: item returned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserSummary'
+        '400':
+          description: invalid input
+        '404':
+          description: resource not found
+  /1/users/{uid}/metrics:
+    get:
+      tags:
+        - users
+      summary: get user metrics
+      parameters:
+        - in: path
+          name: uid
+          schema:
+            type: string
+          required: true
+          description: a firebase uid belonging to a user
+      responses:
+        '200':
+          description: item returned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserStats'
+        '400':
+          description: invalid input
+        #'401':
+        #  description: invalid auth token
+  /1/users/{uid}/followers:
+    get:
+      tags:
+        - users
+      summary: Get followers for a user referenced by uid
+      parameters:
+        - in: path
+          name: uid
+          schema:
+            type: string
+          required: true
+          description: a firebase uid belonging to a user
+      responses:
+        '200':
+          description: A list of followers for a user
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserObject'
+        '400':
+          description: invalid input
+  /1/users/{uid}/following:
+    get:
+      tags:
+        - users
+      summary: Get users followed by user referenced by uid
+      parameters:
+        - in: path
+          name: uid
+          schema:
+            type: string
+          required: true
+          description: a firebase uid belonging to a user
+      responses:
+        '200':
+          description: A list of followers for a user
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserObject'
+        '400':
+          description: invalid input
+  /1/ideas:
+    get:
+      tags:
+        - ideas
+      summary: Get trade ideas
+      operationId: findIdeas
+      description: |
+        By passing in the appropriate options, you can search for
+        trade ideas in the system
+      parameters:
+        - in: query
+          name: symbol
+          description: pass a stock symbol to return trade ideas for a particular symbol
+          schema:
+            type: string
+        - in: query
+          name: type
+          description: Get ideas for this type.
+          schema:
+            type: string
+        - in: query
+          name: strategy
+          description: Get ideas matchinig a particular strategy.
+          schema:
+            type: string
+        - in: query
+          name: status
+          description: Get ideas matching a status.
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+            maximum: 3
+        - in: query
+          name: risk_level
+          description: Get ideas with this risk level. Valid options are 'low','mid','high'.
+          schema:
+            type: string
+        - in: query
+          name: published
+          description: if true, returns only published ideas.
+          schema:
+            type: string
+        - in: query
+          name: min_expiry
+          description: Returns ideas with expiry date no earlier than min_expiry.
+          schema:
+            type: string
+            example: 1720359354250
+        - in: query
+          name: max_expiry
+          description: Returns ideas with expiry date no later than max_expiry.
+          schema:
+            type: string
+            example: 1720359354250
+        - in: query
+          name: open_date
+          description: Returns ideas that were published from this date onwards
+          schema:
+            type: string
+            example: 1720359354250
+        - in: query
+          name: close_date
+          description: Returns ideas that were closed from this date onwards.
+          schema:
+            type: string
+            example: 1720359354250
+        - in: query
+          name: expired
+          description: if true, returns only expired ideas.
+          schema:
+            type: string
+        - in: query
+          name: winners
+          description: if true, returns only profitable ideas.
+          schema:
+            type: boolean
+        - in: query
+          name: losers
+          description: if true, returns only ideas that lost money.
+          schema:
+            type: boolean
+        - in: query
+          name: user
+          description: Get ideas for a username
+          schema:
+            type: string
+        - in: query
+          name: limit
+          description: maximum number of records to return
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+            maximum: 50
+        - in: query
+          name: page
+          description: the page to return
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+            maximum: 50
+        - in: query
+          name: sort
+          description: The sort direction
+          schema:
+            type: integer
+            format: int32
+            minimum: -1
+            maximum: 1
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: a collection of ideas matching criteria
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedListOfIdeas'
+        '400':
+          description: bad input parameter
+    post:
+      tags:
+        - ideas
+      summary: add a trade idea
+      operationId: addIdea
+      description: creates a new trade idea and puts in in draft mode. Pass "immediate=true" in request body to publish immediately after successful creation.
+      responses:
+        '200':
+          description: OK. item created
+        '400':
+          description: invalid input
+        '401':
+          description: invalid auth token, none found
+        '409':
+          description: an existing item already exists
+      requestBody:
+        content:
+          application/json:
+            schema:
+              anyOf:
+                - $ref: '#/components/schemas/StockIdeaBody'
+                - $ref: '#/components/schemas/OptionIdeaBody'
+        description: request parameters
+  /1/ideas/{id}:
+    get:
+      tags:
+        - ideas
+      summary: Get a trade idea with the specified id
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: Numeric ID of the idea to get
+      operationId: findIdea
+      responses:
+        '200':
+          description: item returned
+          content:
+            application/json:
+              schema:
+                anyOf:
+                  - $ref: '#/components/schemas/OptionIdeaResponse'
+                  - $ref: '#/components/schemas/StockIdeaResponse'
+        '404':
+          description: 'item not found'
+  /1/ideas/update/{id}:
+    put:
+      tags:
+        - ideas
+      summary: Update an idea with the specified id
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: Numeric ID of the idea to update
+      security:
+        - BearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              anyOf:
+                - $ref: '#/components/schemas/OptionIdeaBody'
+                - $ref: '#/components/schemas/StockIdeaBody'
+        description: request parameters
+      operationId: updateIdea
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                anyOf:
+                  - $ref: '#/components/schemas/OptionIdeaResponse'
+                  - $ref: '#/components/schemas/StockIdeaResponse'
+        '400':
+          description: invalid request
+        '404':
+          description: resource not found
+  /1/ideas/close/{id}:
+    put:
+      tags:
+        - ideas
+      summary: Close an idea with the specified id
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: Numeric ID of the idea to close
+      operationId: closeIdea
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                anyOf:
+                  - $ref: '#/components/schemas/OptionIdeaResponse'
+                  - $ref: '#/components/schemas/StockIdeaResponse'
+        '400':
+          description: invalid request
+        '404':
+          description: resource not found
+  /1/ideas/delete/{id}:
+    put:
+      tags:
+        - ideas
+      summary: Delete an idea with the specified id
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: Numeric ID of the idea to update
+      operationId: deleteIdea
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: invalid request
+        '404':
+          description: resource not found
+  /1/ideas/publish/{id}:
+    put:
+      tags:
+        - ideas
+      summary: Publish an idea with the specified id
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: Numeric ID of the idea to publish
+      operationId: publishIdea
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: invalid request
+        '404':
+          description: resource not found
+  /1/ideas/expire/{id}:
+    put:
+      tags:
+        - ideas
+      summary: Expire an idea with the specified id
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: Numeric ID of the idea to expire
+      operationId: expireIdea
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: invalid request
+        '404':
+          description: resource not found
+  /1/ideas/like/{id}:
+    put:
+      tags:
+        - ideas
+      summary: Like an idea with the specified id
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: Numeric ID of the idea to like
+      operationId: likeIdea
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: invalid request
+        '404':
+          description: resource not found
+  /register:
+    post:
+      tags:
+        - registration
+      summary: Signup
+      operationId: signup
+      description: user signup
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+                - username
+              properties:
+                email:
+                  type: string
+                  example: deji@mailserver.com
+                password:
+                  type: string
+                  example: T3st123@
+                username:
+                  type: string
+                  example: deji
+      responses:
+        '201':
+          description: OK. item created
+        '400':
+          description: invalid input
+  /username-check:
+    post:
+      tags:
+        - registration
+      summary: check if a username is available in the system
+      operationId: usernameCheck
+      description: lookup a username
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - username
+              properties:
+                username:
+                  type: string
+                  example: deji
+      responses:
+        '200':
+          description: OK. username is available
+        '400':
+          description: invalid input
+  /email-check:
+    post:
+      tags:
+        - registration
+      summary: check if an email is available in the system
+      operationId: emailCheck
+      description: lookup an email
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+              properties:
+                email:
+                  type: string
+                  example: joe@mailserver.com
+      responses:
+        '200':
+          description: OK. email is available
+        '400':
+          description: invalid input
+  /1/subscriptions:
+    get:
+      tags:
+        - users
+      summary: get subscriptions for the authenticated user
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedListOfUsers'
+        '400':
+          description: invalid input
+        '401':
+          description: invalid authentication 
+  /1/subscribers:
+    get:
+      tags:
+        - users
+      summary: get subscribers for the authenticated user
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedListOfUsers'
+        '400':
+          description: invalid input
+        '401':
+          description: invalid authentication 
+  /1/subscription/{uid}:
+    get:
+      tags:
+        - users
+      summary: determine if authenticated is subscribing to user referenced by uid
+      parameters:
+        - in: path
+          name: uid
+          schema:
+            type: string
+          required: true
+          description: a firebase uid belonging to a user
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  subscribing:
+                    type: boolean
+        '400':
+          description: invalid input
+        '401':
+          description: invalid authentication
+  /1/following/{uid}:
+    get:
+      tags:
+        - users
+      summary: determine if authenticated user is following the user referenced by uid
+      parameters:
+        - in: path
+          name: uid
+          schema:
+            type: string
+          required: true
+          description: a firebase uid belonging to a user
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: An object 
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  following:
+                    type: boolean
+        '400':
+          description: invalid input
+        '401':
+          description: invalid authentication
+    put:
+      tags:
+        - users
+      summary: create a connection between the authenticated user and a user referenced by uid
+      parameters:
+        - in: path
+          name: uid
+          schema:
+            type: string
+          required: true
+          description: the firebase uid for a user
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: An object 
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: status is true if the operation completes successfully
+        '400':
+          description: invalid input
+        '401':
+          description: invalid authentication
+    delete:
+      tags:
+        - users
+      summary: remove connection between the authenticated user and the user referenced by uid
+      parameters:
+        - in: path
+          name: uid
+          schema:
+            type: string
+          required: true
+          description: the firebase uid for a user
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: An object 
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: status is true if the operation completes successfully
+        '400':
+          description: invalid input
+        '401':
+          description: invalid authentication
+  /1/settings:
+    put:
+      tags:
+        - account
+      summary: update display name for the authenticated user.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: deji
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: The modified user object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserObject'
+        '400':
+          description: Bad request
+        '401':
+          description: invalid authentication
+  /1/settings/account:
+    put:
+      tags:
+        - account
+      summary: update account setting for the authenticated user.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  example: deji
+                email:
+                  type: string
+                  example: user@mailserver.com
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: The modified user object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserObject'
+        '400':
+          description: invalid request
+        '401':
+          description: invalid authentication
+  /1/settings/password:
+    put:
+      tags:
+        - account
+      summary: update account password for the authenticated user.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                password:
+                  type: string
+                  example: P@ss123
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: The modified user object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserObject'
+        '400':
+          description: Bad request
+        '401':
+          description: invalid authentication
+components:
+  schemas:
+    StockIdeaResponse:
+      type: object
+      required:
+        - _id
+        - symbol
+        - type
+        - strategy
+        - creator
+      properties:
+        _id:
+          type: string
+          format: uuid
+          example: 6679c10520fb6db181f271c3
+        symbol:
+          type: string
+          example: AAPL
+        type:
+          type: string
+          example: 'stock'
+        strategy:
+          type: string
+          example: 'long'
+        creator:
+          $ref: '#/components/schemas/Creator'
+    OptionIdeaResponse:
+      type: object
+      required:
+        - _id
+        - symbol
+        - type
+        - strategy
+        - expiry
+        - creator
+      properties:
+        _id:
+          type: string
+          format: uuid
+          example: 6679c10520fb6db181f271c3
+        symbol:
+          type: string
+          example: AAPL
+        type:
+          type: string
+          example: 'option'
+        strategy:
+          type: string
+          example: 'call'
+        expiry:
+          type: string
+          example: '2024-07-19T20:00:00.000Z'
+        creator:
+          $ref: '#/components/schemas/Creator'
+    Creator:
+      required:
+        - uid
+        - username
+      properties:
+        name:
+          type: string
+          example: e3zvdR6TfqVcrQWhatursiKrrfm2
+        username:
+          type: string
+          example: 'deji'
+      type: object
+    StockIdeaBody:
+      required:
+        - symbol
+        - type
+        - strategy
+      properties:
+        symbol:
+          type: string
+          example: AAPL
+        type:
+          type: string
+          example: 'stock'
+        strategy:
+          type: string
+          example: 'long'
+      type: object
+    OptionIdeaBody:
+      required:
+        - symbol
+        - type
+        - strategy
+        - strike
+        - expiry
+      properties:
+        symbol:
+          type: string
+          example: AAPL
+        type:
+          type: string
+          example: 'option'
+        strategy:
+          type: string
+          example: 'call'
+        strike:
+          type: number
+          example: 10.50
+        expiry:
+          type: string
+          example: '2024-07-19T20:00:00.000Z'
+      type: object
+    UserObject:
+      type: object
+      properties:
+        _id:
+          type: string
+          format: uuid
+          example: 6679c10520fb6db181f271c3
+        username:
+          type: string
+          example: deji
+        status:
+          type: integer
+          description: The status code for the user
+        firebase_id:
+          type: string
+          example: VlPE5Yh16tNqaVozg2PGrDr8Q8j1
+        deleted:
+          type: boolean
+          example: false
+        messaging_enabled:
+          type: boolean
+          example: false
+        created_at:
+          type: string
+          example: 1720202913939
+          description: A timestamp representing the creation date
+    UserStats:
+      type: object
+      properties:
+        published:
+          type: integer
+          description: The number of published ideas for this user
+        winners:
+          type: integer
+          description: The number of profitable ideas
+        losers:
+          type: integer
+          description: The number of ideas that returned a loss
+        winRate:
+          type: integer
+          description: The user's win rate based on wins and losses
+        average_gain:
+          type: number
+        average_loss:
+          type: number
+        followers:
+          type: integer
+          description: the number of followers
+        following:
+          type: integer
+          description: the number of users this user is following
+        subscribers:
+          type: integer
+          description: the number of subscribers
+        earnings:
+          type: integer
+          description: The user's total earnings
+        created_at:
+          type: string
+          example: 1720202913939
+          description: A timestamp representing the creation date
+    UserSummary:
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/UserObject'
+        stats:
+          $ref: '#/components/schemas/UserStats'
+    PaginatedListOfUsers:
+      type: object
+      properties:
+        docs:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserObject'
+        totalDocs:
+          type: integer
+          example: 1000
+        limit:
+          type: integer
+          example: 20
+        totalPages:
+          type: integer
+          example: 50
+        page:
+          type: integer
+          example: 1
+        pagingCounter:
+          type: integer
+          example: 1
+        hasPrevPage:
+          type: boolean
+          example: false
+        hasNextPage:
+          type: boolean
+          example: true
+        prevPage:
+          type: integer
+          example: null
+        nextPage:
+          type: integer
+          example: 2
+    PaginatedListOfIdeas:
+      type: object
+      properties:
+        docs:
+          type: array
+          items:
+            anyOf:
+              - $ref: '#/components/schemas/OptionIdeaResponse'
+              - $ref: '#/components/schemas/StockIdeaResponse'
+        totalDocs:
+          type: integer
+          example: 1594
+        limit:
+          type: integer
+          example: 20
+        totalPages:
+          type: integer
+          example: 80
+        page:
+          type: integer
+          example: 1
+        pagingCounter:
+          type: integer
+          example: 1
+        hasPrevPage:
+          type: boolean
+          example: false
+        hasNextPage:
+          type: boolean
+          example: true
+        prevPage:
+          type: integer
+          example: null
+        nextPage:
+          type: integer
+          example: 2
+          
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
