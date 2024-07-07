@@ -288,9 +288,9 @@ paths:
     post:
       tags:
         - ideas
-      summary: add a trade idea
+      summary: Create a Trade idea
       operationId: addIdea
-      description: creates a new trade idea and puts in in draft mode. Pass "immediate=true" in request body to publish immediately after successful creation.
+      description: creates a new trade idea and puts it in draft mode. Pass "immediate=true" in request body to publish immediately after successful creation.
       responses:
         '200':
           description: OK. item created
