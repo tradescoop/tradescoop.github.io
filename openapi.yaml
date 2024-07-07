@@ -709,6 +709,62 @@ paths:
           description: invalid input
         '401':
           description: invalid authentication
+  /subscribe/{uid}:
+    put:
+      tags:
+        - users
+      summary: subscribe to a user referenced by uid
+      parameters:
+        - in: path
+          name: uid
+          schema:
+            type: string
+          required: true
+          description: a firebase uid belonging to a user
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: An object 
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+        '400':
+          description: invalid input
+        '401':
+          description: invalid authentication
+    delete:
+      tags:
+        - users
+      summary: unsubscribe from a user referenced by uid
+      parameters:
+        - in: path
+          name: uid
+          schema:
+            type: string
+          required: true
+          description: a firebase uid belonging to a user
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: An object 
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+        '400':
+          description: invalid input
+        '401':
+          description: invalid authentication
+  
   /1/settings:
     put:
       tags:
