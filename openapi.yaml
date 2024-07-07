@@ -1,7 +1,7 @@
 openapi: 3.0.0
 servers:
   - description: Tradescoop API Service
-    url: https://api.staging.tradescoop.io
+    url: https://api.tradescoop.io
 info:
   description: Tradescoop API
   version: "1.0.0"
