@@ -1,6 +1,6 @@
 openapi: 3.0.0
 servers:
-  - description: Tradescoop API Service
+  - description: TradeScoop Web API enables the creation of applications that can interact with Tradescoop services, such as retrieving trading ideas, getting recommendations, creating and managing trading ideas.
     url: https://api.tradescoop.io
 info:
   description: Tradescoop API
