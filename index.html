@@ -1,19 +1,68 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" type="text/css" href="https://unpkg.com/swagger-ui-dist@3/swagger-ui.css">
-<title>OpenAPI Tradescoop Docs</title>
-<body>
-<div id="openapi">
-<script src="https://unpkg.com/swagger-ui-dist@3/swagger-ui-bundle.js"></script>
-<script>
-window.onload = function () {
-  const ui = SwaggerUIBundle({
-    url: "openapi.yaml",
-    dom_id: "#openapi"
-  })
-}
-</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Tradescoop Index - Explore Litepaper, API Documentation, and Company Website">
+    <meta name="author" content="Tradescoop">
+    <title>Tradescoop | GitHub Pages Index</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50 text-gray-900 font-sans">
+    <!-- Header -->
+    <header class="bg-[#00944A] text-white py-4">
+        <div class="container mx-auto flex items-center justify-between px-4">
+            <div class="flex items-center">
+                <img src="https://tradescoop.io/images/logo-transparent-sm.svg" alt="Tradescoop Logo" class="h-12 w-auto">
+                <h1 class="ml-4 text-3xl font-bold">Tradescoop</h1>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto my-8 px-4">
+        <!-- About Section -->
+        <section class="bg-white shadow-md rounded p-6">
+            <h2 class="text-2xl font-semibold mb-4 text-[#00944A]">About Tradescoop</h2>
+            <p>
+                Tradescoop is a cutting-edge social trading platform that leverages Web3, AI-powered trading agents, and blockchain transparency to enhance user collaboration and provide real-time insights. With an innovative ecosystem, Tradescoop empowers traders to maximize profitability, reduce risk, and tap into the collective expertise of the community.
+            </p>
+        </section>
+
+        <!-- Explore Section -->
+        <section class="bg-white shadow-md rounded p-6 mt-6">
+            <h2 class="text-2xl font-semibold mb-4 text-[#00944A]">Explore Tradescoop</h2>
+            <ul class="list-disc list-inside text-lg">
+                <li>
+                    <a href="https://tradescoop.github.io/litepaper" 
+                       class="text-[#8BC6FF] underline hover:text-[#00944A]">
+                       Tradescoop Litepaper
+                    </a>
+                    <p class="text-sm text-gray-600">Read about the vision, features, and roadmap of Tradescoop.</p>
+                </li>
+                <li class="mt-4">
+                    <a href="https://tradescoop.github.io/apidocs" 
+                       class="text-[#8BC6FF] underline hover:text-[#00944A]">
+                       Tradescoop API Documentation
+                    </a>
+                    <p class="text-sm text-gray-600">Access the API documentation to integrate Tradescoop's features.</p>
+                </li>
+                <li class="mt-4">
+                    <a href="https://tradescoop.io" 
+                       class="text-[#8BC6FF] underline hover:text-[#00944A]">
+                       Tradescoop Official Website
+                    </a>
+                    <p class="text-sm text-gray-600">Visit our official website for the latest updates and news.</p>
+                </li>
+            </ul>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-[#A6B0AA] text-white py-4 mt-8">
+        <div class="container mx-auto text-center">
+            <p>&copy; 2024 Tradescoop. All rights reserved.</p>
+        </div>
+    </footer>
 </body>
+</html>
