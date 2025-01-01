@@ -3,65 +3,76 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Tradescoop Index - Explore Litepaper, API Documentation, and Company Website">
-    <meta name="author" content="Tradescoop">
-    <title>Tradescoop | GitHub Pages Index</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <title>Tradescoop - Web3 Social Trading Platform</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #2E7D32 0%, #1B5E20 100%);
+        }
+        .hover-lift {
+            transition: transform 0.2s;
+        }
+        .hover-lift:hover {
+            transform: translateY(-2px);
+        }
+    </style>
 </head>
-<body class="bg-gray-50 text-gray-900 font-sans">
-    <!-- Header -->
-    <header class="bg-[#00944A] text-white py-4">
-        <div class="container mx-auto flex items-center justify-between px-4">
-            <div class="flex items-center">
-                <img src="https://tradescoop.io/images/logo-transparent-sm.svg" alt="Tradescoop Logo" class="h-12 w-auto">
-                <h1 class="ml-4 text-3xl font-bold">Tradescoop</h1>
+<body class="bg-gray-50">
+    <header class="gradient-bg text-white py-20 px-6">
+        <div class="max-w-4xl mx-auto">
+            <h1 class="text-5xl font-bold mb-6">Tradescoop</h1>
+            <p class="text-xl mb-8 text-gray-100">Revolutionizing trading with Web3 technology and decentralized intelligence</p>
+            <p class="mb-8 text-gray-100">Tradescoop is a cutting-edge social trading platform that leverages Web3, AI-powered trading agents, and blockchain transparency to enhance user collaboration and provide real-time insights. With an innovative ecosystem, Tradescoop empowers traders to maximize profitability, reduce risk, and tap into the collective expertise of the community.</p>
+            <div class="flex flex-wrap gap-4">
+                <a href="https://tradescoop.io" class="border border-white py-3 px-6 rounded-lg font-semibold hover:bg-[#4fc47e]">Launch App</a>
             </div>
         </div>
     </header>
 
-    <!-- Main Content -->
-    <main class="container mx-auto my-8 px-4">
-        <!-- About Section -->
-        <section class="bg-white shadow-md rounded p-6">
-            <h2 class="text-2xl font-semibold mb-4 text-[#00944A]">About Tradescoop</h2>
-            <p>
-                Tradescoop is a cutting-edge social trading platform that leverages Web3, AI-powered trading agents, and blockchain transparency to enhance user collaboration and provide real-time insights. With an innovative ecosystem, Tradescoop empowers traders to maximize profitability, reduce risk, and tap into the collective expertise of the community.
-            </p>
-        </section>
+    <main class="max-w-4xl mx-auto px-6 py-16">
+        <div class="grid md:grid-cols-2 gap-8 mb-16">
+            <div class="bg-white p-8 rounded-xl shadow-sm hover-lift">
+                <h2 class="text-2xl font-bold mb-4">Web3 Litepaper</h2>
+                <p class="text-gray-600 mb-4">Explore our Web3 Litepaper detailing Tradescoop's innovative approach to decentralized trading insights and AI Agents.</p>
+                <a href="https://tradescoop.github.io/litepaper" class="text-[#2E7D32] font-semibold hover:underline">Read Litepaper →</a>
+            </div>
+            <div class="bg-white p-8 rounded-xl shadow-sm hover-lift">
+                <h2 class="text-2xl font-bold mb-4">$SCOOP Token</h2>
+                <p class="text-gray-600 mb-4">Learn about our recent token launch and how $SCOOP powers the Tradescoop ecosystem.</p>
+                <a href="https://tradescoop.io/scoop-token-launch" class="text-[#2E7D32] font-semibold hover:underline">Token Details →</a>
+            </div>
+        </div>
 
-        <!-- Explore Section -->
-        <section class="bg-white shadow-md rounded p-6 mt-6">
-            <h2 class="text-2xl font-semibold mb-4 text-[#00944A]">Explore Tradescoop</h2>
-            <ul class="list-disc list-inside text-lg">
-                <li>
-                    <a href="https://tradescoop.github.io/litepaper" 
-                       class="text-[#8BC6FF] underline hover:text-[#00944A]">
-                       Tradescoop Litepaper
-                    </a>
-                    <p class="text-sm text-gray-600">Read about the vision, features, and roadmap of Tradescoop.</p>
-                </li>
-                <li class="mt-4">
-                    <a href="https://tradescoop.github.io/apidocs" 
-                       class="text-[#8BC6FF] underline hover:text-[#00944A]">
-                       Tradescoop API Documentation
-                    </a>
-                    <p class="text-sm text-gray-600">Access the API documentation to integrate Tradescoop's features.</p>
-                </li>
-                <li class="mt-4">
-                    <a href="https://tradescoop.io" 
-                       class="text-[#8BC6FF] underline hover:text-[#00944A]">
-                       Tradescoop Official Website
-                    </a>
-                    <p class="text-sm text-gray-600">Visit our official website for the latest updates and news.</p>
-                </li>
-            </ul>
-        </section>
+        <!--section class="bg-white p-8 rounded-xl shadow-sm mb-16">
+            <h2 class="text-2xl font-bold mb-6">Rest API Documentation</h2>
+            <p class="text-gray-600 mb-6">Access Tradescoop's powerful trading APIs and integrate our platform into your applications.</p>
+            <div class="grid md:grid-cols-3 gap-4">
+                <a href="https://tradescoop.github.io/apidocs" class="p-4 border rounded-lg hover:border-[#2E7D32] hover:text-[#2E7D32]">
+                    <h3 class="font-semibold mb-2">REST API</h3>
+                    <p class="text-sm text-gray-500">Complete REST API documentation</p>
+                </a>
+                <a href="#websocket" class="p-4 border rounded-lg hover:border-[#2E7D32] hover:text-[#2E7D32]">
+                    <h3 class="font-semibold mb-2">WebSocket</h3>
+                    <p class="text-sm text-gray-500">Real-time market data streams</p>
+                </a>
+                <a href="#sdk" class="p-4 border rounded-lg hover:border-[#2E7D32] hover:text-[#2E7D32]">
+                    <h3 class="font-semibold mb-2">SDKs</h3>
+                    <p class="text-sm text-gray-500">Official SDK implementations</p>
+                </a>
+            </div>
+    </section-->
     </main>
 
-    <!-- Footer -->
-    <footer class="bg-[#A6B0AA] text-white py-4 mt-8">
-        <div class="container mx-auto text-center">
-            <p>&copy; 2024 Tradescoop. All rights reserved.</p>
+    <footer class="border-t">
+        <div class="max-w-4xl mx-auto px-6 py-8">
+            <div class="flex justify-between items-center">
+                <p class="text-gray-600">© 2024 Tradescoop. All rights reserved.</p>
+                <div class="flex gap-6">
+                    <a href="https://tradescoop.github.io" class="text-gray-600 hover:text-[#2E7D32]">GitHub</a>
+                    <a href="https://t.me/TradescoopHQ" class="text-gray-600 hover:text-[#2E7D32]">Telegram</a>
+                    <a href="https://twitter.com/tradescoophq" class="text-gray-600 hover:text-[#2E7D32]">Twitter</a>
+                </div>
+            </div>
         </div>
     </footer>
 </body>
